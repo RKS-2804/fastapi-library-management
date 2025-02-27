@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block tactive %} active {% endblock tactive %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center">Transactions</h1>
+
+    <!-- Transactions Table -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>User</th>
+                <th>Book</th>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if transactions %}
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.id }}</td>
+                    <td>{{ transaction.user_name }}</td>
+                    <td>{{ transaction.book_title }}</td>
+                    <td>{{ transaction.checkout_date }}</td>
+                    <td>{{ transaction.status }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <!-- Show a message when there are no transactions -->
+                <tr>
+                    <td colspan="5" class="text-center">No transactions available</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <!-- Add Transaction Modal Trigger (Always Visible) -->
+    <div class="text-center mt-4">
+        <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addTransactionModal">
+            Add New Transaction
+        </button>
+    </div>
+
+    <!-- Add Transaction Modal -->
+    <div class="modal fade" id="addTransactionModal" tabindex="-1" aria-labelledby="addTransactionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTransactionModalLabel">Add New Transaction</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Ensure users and books exist before rendering form -->
+                    {% if users and books %}
+                        <form method="POST" action="/transactions/add_transaction">
+                            <div class="mb-3">
+                                <label for="user" class="form-label">User</label>
+                                <select class="form-select" id="user" name="user_id" required>
+                                    {% for user in users %}
+                                    <option value="{{ user.id }}">{{ user.username }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Status</label>
+                                <select class="form-select" id="status" name="status" required onchange="toggleBookFields()">
+                                    <option value="checked_out">Check-Out</option>
+                                    <option value="checked_in">Check-In</option>
+                                </select>
+                            </div>
+
+                            <!-- Fields for check-out -->
+                            <div class="mb-3" id="bookSelectDiv">
+                                <label for="book" class="form-label">Select Book</label>
+                                <select class="form-select" id="book" name="book_id">
+                                    {% for book in books %}
+                                    <option value="{{ book.id }}">{{ book.title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Fields for check-in -->
+                            <div id="bookInputDiv" style="display: none;">
+                                <div class="mb-3">
+                                    <label for="title" class="form-label">Book Title</label>
+                                    <input type="text" class="form-control" id="title" name="title">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="author" class="form-label">Author</label>
+                                    <input type="text" class="form-control" id="author" name="author">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Transaction</button>
+                        </form>
+                    {% else %}
+                        <p class="text-center text-danger">No users or books available to add a transaction.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toggle book fields based on transaction status -->
+    <script>
+        function toggleBookFields() {
+            var status = document.getElementById("status").value;
+            var bookSelectDiv = document.getElementById("bookSelectDiv");
+            var bookInputDiv = document.getElementById("bookInputDiv");
+            var bookField = document.getElementById("book");
+            var titleField = document.getElementById("title");
+            var authorField = document.getElementById("author");
+
+            if (status === "checked_out") {
+                bookSelectDiv.style.display = "block";
+                bookInputDiv.style.display = "none";
+                bookField.required = true;
+                titleField.required = false;
+                authorField.required = false;
+            } else {
+                bookSelectDiv.style.display = "none";
+                bookInputDiv.style.display = "block";
+                bookField.required = false;
+                titleField.required = true;
+                authorField.required = true;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            toggleBookFields();
+        });
+    </script>
+
+</div>
+{% endblock %}

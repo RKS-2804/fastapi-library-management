@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h1 class="text-center">Edit Book</h1>
+
+    <form method="POST" action="/books/update/{{ book.id }}">
+      <div class="mb-3">
+        <label for="bookTitle" class="form-label">Title</label>
+        <input type="text" class="form-control" id="bookTitle" name="title" value="{{ book.title }}" required>
+      </div>
+      <div class="mb-3">
+        <label for="bookAuthor" class="form-label">Author</label>
+        <input type="text" class="form-control" id="bookAuthor" name="author" value="{{ book.author }}" required>
+      </div>
+      <button type="submit" class="btn btn-success">Update Book</button>
+      <a href="/books" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block homeactive %} active {% endblock homeactive %}
+{% block title %} Home {% endblock title %}
+
+{% block content %}  <!-- Changed from "body" to "content" -->
+
+<style>
+/*  Add a Beautiful Hero Section */
+.hero-section {
+    background: linear-gradient(to right, #6a11cb, #2575fc); /* Gradient Background */
+    color: white;
+    padding: 100px 0;
+    text-align: center;
+    border-radius: 10px;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+.hero-section h1 {
+    font-weight: bold;
+    font-size: 3rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.hero-section p {
+    font-size: 1.2rem;
+    margin-top: 10px;
+    opacity: 0.9;
+}
+
+/* CTA Button */
+.hero-section .btn-primary {
+    background: #ff5733;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 25px;
+    transition: 0.3s;
+}
+
+.hero-section .btn-primary:hover {
+    background: #c70039;
+    transform: scale(1.05);
+}
+
+/* Smooth Fade-in Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
+
+<!-- Beautiful Hero Section -->
+<div class="container my-4">
+    <div class="hero-section">
+        <h1>Welcome to Library Management System!</h1>
+        <p>Your space to explore Books.</p>
+        <a class="btn btn-primary btn-lg mt-3" href="/books" role="button">Start Exploring</a>
+    </div>
+</div>
+
+{% endblock content %} <!-- Changed from "body" to "content" -->
